@@ -1,26 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="2"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/buttonBlack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@color/colorBlack">
+        android:id="@+id/buttonPause"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ppause">
     </Button>
 
     <Button
-        android:id="@+id/buttonWhite"
+        android:id="@+id/buttonRestart"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBottom="@id/buttonPause"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:background="@drawable/restartt"></Button>
+
+    <Button
+        android:id="@+id/buttonSettings"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBottom="@id/buttonPause"
+        android:background="@drawable/settings"></Button>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@color/colorWhite">
-    </Button>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:weightSum="2"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/buttonBlack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorBlack">
+        </Button>
+
+        <Button
+            android:id="@+id/buttonWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorWhite">
+        </Button>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
