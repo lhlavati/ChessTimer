@@ -11,20 +11,58 @@
         android:layout_height="match_parent"
         android:weightSum="2"
         android:orientation="vertical">
-
-        <Button
-            android:id="@+id/buttonBlack"
+        <LinearLayout
+            android:id="@+id/layoutBlack"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorBlack" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-        <Button
-            android:id="@+id/buttonWhite"
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@color/colorBlack"
+                android:textColor="@color/colorWhite"
+                android:text="05:00"
+                android:textSize="100sp"
+                android:rotation="180"
+                android:fontFamily="@font/Arial_Rounded_MT_ExtraBold" />
+
+            <Button
+                android:id="@+id/buttonBlack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorBlack" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorWhite" />
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@color/colorWhite"
+                android:textColor="@color/colorBlack"
+                android:text="05:00"
+                android:textSize="100sp"
+                android:fontFamily="@font/Arial_Rounded_MT_ExtraBold" />
+
+            <Button
+                android:id="@+id/buttonWhite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
