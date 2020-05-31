@@ -6,52 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/buttonPause"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:background="@drawable/ppause">
-    </Button>
-
-    <Button
-        android:id="@+id/buttonRestart"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_alignBottom="@id/buttonPause"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:background="@drawable/restartt"></Button>
-
-    <Button
-        android:id="@+id/buttonSettings"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_alignBottom="@id/buttonPause"
-        android:background="@drawable/settings"></Button>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="2"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/buttonBlack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorBlack">
-        </Button>
+            android:background="@color/colorBlack" />
 
         <Button
             android:id="@+id/buttonWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorWhite">
-        </Button>
+            android:background="@color/colorWhite" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <Button
+            android:id="@+id/buttonSettings"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/settings" />
+
+        <Button
+            android:id="@+id/buttonPause"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ppause" />
+
+        <Button
+            android:id="@+id/buttonRestart"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/restartt" />
+
+    </LinearLayout>
 
 </RelativeLayout>
