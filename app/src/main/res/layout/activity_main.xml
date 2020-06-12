@@ -19,6 +19,7 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/textViewBlack"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -47,6 +48,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/textViewWhite"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -83,7 +85,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/ppause" />
+            android:background="@drawable/play" />
 
         <Button
             android:id="@+id/buttonRestart"
