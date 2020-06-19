@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final long START_TIME_IN_MILLIS = 900000;
+    private static final long START_TIME_IN_MILLIS = 300000;
 
     private TextView mTextViewWhite;
     private TextView mTextViewBlack;
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startBlackTimer();
-                stopWhiteTimer();
             }
         });
         mBlackLayout.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startWhiteTimer(){
+        if(!mTimerRunningWhite){
+            mTimerRunningWhite = true;
+        }
+        if(mTimerRunningBlack){
+            mCountDownTimerBlack.cancel();
+            mTimerRunningBlack = false;
+        }
         mCountDownTimerWhite = new CountDownTimer(mTimeLeftInMillisWhite, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -70,14 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }.start();
-    }
-    
-    private void stopWhiteTimer(){
-        if(mTimerRunningBlack){
-            mCountDownTimerBlack.cancel();
-            mTimerRunningWhite = true;
-            mTimerRunningBlack = false;
-        }
     }
 
     private void updateWhiteTimer(){
@@ -98,6 +96,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBlackTimer(){
+        if(!mTimerRunningBlack){
+            mTimerRunningBlack = true;
+        }
+        if(mTimerRunningWhite){
+            mCountDownTimerWhite.cancel();
+            mTimerRunningWhite = false;
+        }
         mCountDownTimerBlack = new CountDownTimer(mTimeLeftInMillisBlack, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -117,7 +122,11 @@ public class MainActivity extends AppCompatActivity {
         int seconds = (int) mTimeLeftInMillisBlack % 60000 / 1000;
 
         String timeLeftText;
-        timeLeftText = "" + minutes;
+        if(minutes < 10){
+            timeLeftText = "0" + minutes;
+        }else{
+            timeLeftText = "" + minutes;
+        }
         timeLeftText += ":";
         if (seconds < 10) timeLeftText += "0";
         timeLeftText += seconds;
