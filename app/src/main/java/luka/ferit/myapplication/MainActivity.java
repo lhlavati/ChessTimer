@@ -3,6 +3,9 @@ package luka.ferit.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Layout;
@@ -54,12 +57,19 @@ public class MainActivity extends AppCompatActivity {
                 startWhiteTimer();
             }
         });
+        mButtonReset = findViewById(R.id.buttonRestart);
+        mButtonReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetTimer();
+            }
+        });
     }
 
     private void startWhiteTimer(){
-        if(!mTimerRunningWhite){
-            mTimerRunningWhite = true;
-        }
+        if(mTimerRunningWhite) return;
+
+        mTimerRunningWhite = true;
         if(mTimerRunningBlack){
             mCountDownTimerBlack.cancel();
             mTimerRunningBlack = false;
@@ -96,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBlackTimer(){
-        if(!mTimerRunningBlack){
-            mTimerRunningBlack = true;
-        }
+        if(mTimerRunningBlack) return;
+
+        mTimerRunningBlack = true;
         if(mTimerRunningWhite){
             mCountDownTimerWhite.cancel();
             mTimerRunningWhite = false;
@@ -132,6 +142,31 @@ public class MainActivity extends AppCompatActivity {
         timeLeftText += seconds;
 
         mTextViewBlack.setText(timeLeftText);
+    }
+
+    private void resetTimer(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Are you sure you want to reset?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mTimeLeftInMillisWhite = START_TIME_IN_MILLIS;
+                        mTimeLeftInMillisBlack = START_TIME_IN_MILLIS;
+                        mCountDownTimerWhite.cancel();
+                        mCountDownTimerBlack.cancel();
+                        mTimerRunningWhite = false;
+                        mTimerRunningBlack = false;
+                        updateBlackTimer();
+                        updateWhiteTimer();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+                builder.create().show();
     }
 
     @Override
