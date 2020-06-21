@@ -80,7 +80,7 @@
             android:background="@drawable/settings" />
 
         <Button
-            android:id="@+id/buttonPause"
+            android:id="@+id/buttonStartPause"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"

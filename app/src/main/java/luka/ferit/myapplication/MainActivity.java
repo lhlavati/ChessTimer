@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private CountDownTimer mCountDownTimerBlack;
     private boolean mTimerRunningWhite = false;
     private boolean mTimerRunningBlack = false;
+    private boolean mWhiteLastToPlay = false;
     private long mTimeLeftInMillisWhite = START_TIME_IN_MILLIS;
     private long mTimeLeftInMillisBlack = START_TIME_IN_MILLIS;
 
@@ -64,12 +65,41 @@ public class MainActivity extends AppCompatActivity {
                 resetTimer();
             }
         });
+        mButtonStartPause = findViewById(R.id.buttonStartPause);
+        mButtonStartPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mTimerRunningWhite && !mTimerRunningBlack && mTimeLeftInMillisWhite == START_TIME_IN_MILLIS && mTimeLeftInMillisBlack == START_TIME_IN_MILLIS){
+                    startBlackTimer();
+                } else if (mButtonStartPause.getBackground().equals(R.drawable.pause)) {
+                    if(mTimerRunningWhite){
+                        mButtonStartPause.setBackgroundResource(R.drawable.play);
+                        mCountDownTimerWhite.cancel();
+                        mTimerRunningWhite = false;
+                        mWhiteLastToPlay = true;
+                    } else if (mTimerRunningBlack) {
+                        mButtonStartPause.setBackgroundResource(R.drawable.play);
+                        mCountDownTimerBlack.cancel();
+                        mTimerRunningBlack = false;
+                        mWhiteLastToPlay = false;
+                    }
+                } else if (mButtonStartPause.getBackground().equals(R.drawable.play)){
+                    if(mWhiteLastToPlay){
+                        startWhiteTimer();
+                    } else {
+                        startBlackTimer();
+                    }
+                }
+            }
+        });
     }
 
     private void startWhiteTimer(){
+        mButtonStartPause.setBackgroundResource(R.drawable.pause);
         if(mTimerRunningWhite) return;
 
         mTimerRunningWhite = true;
+
         if(mTimerRunningBlack){
             mCountDownTimerBlack.cancel();
             mTimerRunningBlack = false;
@@ -106,9 +136,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBlackTimer(){
+        mButtonStartPause.setBackgroundResource(R.drawable.pause);
+
         if(mTimerRunningBlack) return;
 
         mTimerRunningBlack = true;
+
         if(mTimerRunningWhite){
             mCountDownTimerWhite.cancel();
             mTimerRunningWhite = false;
@@ -146,10 +179,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetTimer(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Are you sure you want to reset?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setTitle("Reset timer?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        mButtonStartPause.setBackgroundResource(R.drawable.play);
                         mTimeLeftInMillisWhite = START_TIME_IN_MILLIS;
                         mTimeLeftInMillisBlack = START_TIME_IN_MILLIS;
                         mCountDownTimerWhite.cancel();
@@ -160,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                         updateWhiteTimer();
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         return;
