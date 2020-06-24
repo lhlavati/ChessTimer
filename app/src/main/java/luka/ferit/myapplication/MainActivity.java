@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -218,13 +219,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void settings(){
         pauseTimers();
-        final NumberPicker numberPicker1 = new NumberPicker(getApplicationContext());
+
+        final NumberPicker numberPicker1 = findViewById(R.id.number_picker1);
         numberPicker1.setMinValue(0);
         numberPicker1.setMaxValue(60);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(numberPicker1)
-                .setTitle("Set timer and increment number")
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        builder.setView(inflater.inflate(R.layout.number_picker, null))
+                .setTitle("Set time and increment number")
                 .setPositiveButton("Set", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
