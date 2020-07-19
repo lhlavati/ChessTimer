@@ -220,14 +220,13 @@ public class MainActivity extends AppCompatActivity {
     private void settings(){
         pauseTimers();
 
-        final NumberPicker numberPicker1 = findViewById(R.id.number_picker1);
+        final NumberPicker numberPicker1 = new NumberPicker(this);
         numberPicker1.setMinValue(0);
         numberPicker1.setMaxValue(60);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
 
-        builder.setView(inflater.inflate(R.layout.number_picker, null))
+        builder.setView(numberPicker1)
                 .setTitle("Set time and increment number")
                 .setPositiveButton("Set", new DialogInterface.OnClickListener() {
                     @Override
