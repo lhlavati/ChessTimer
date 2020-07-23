@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/chesstimerlogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
+        <activity android:name=".Increment"></activity>
+        <activity android:name=".Moves" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

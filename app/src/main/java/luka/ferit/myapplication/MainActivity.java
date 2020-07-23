@@ -1,11 +1,13 @@
 package luka.ferit.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Layout;
@@ -21,11 +23,19 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String WHITE = "white_moves";
+    public static final String BLACK = "black_moves";
+
     private long START_TIME_IN_MILLIS = 300000;
     private long toMillis;
+    int whiteMoves = 0;
+    int blackMoves = 0;
+    int increment = 0;
 
     private TextView mTextViewWhite;
     private TextView mTextViewBlack;
+    private Button mButtonIncrement;
+    private Button mButtonMoves;
     private Button mButtonStartPause;
     private Button mButtonReset;
     private Button mButtonSettings;
@@ -56,12 +66,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startBlackTimer();
+                mTimeLeftInMillisWhite += increment;
+                updateWhiteTimer();
             }
         });
         mBlackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startWhiteTimer();
+                mTimeLeftInMillisBlack += increment;
+                updateBlackTimer();
             }
         });
         mButtonReset = findViewById(R.id.buttonRestart);
@@ -84,13 +98,49 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    mButtonSettings = findViewById(R.id.buttonSettings);
-    mButtonSettings.setOnClickListener(new View.OnClickListener() {
+        mButtonSettings = findViewById(R.id.buttonSettings);
+        mButtonSettings.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             settings();
         }
     });
+        mButtonIncrement = findViewById(R.id.buttonIncrement);
+        mButtonIncrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openThirdActivity();
+            }
+        });
+        mButtonMoves = findViewById(R.id.buttonMoves);
+        mButtonMoves.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSecondActivity();
+            }
+        });
+    }
+
+    private void openSecondActivity(){
+        Intent intent = new Intent(this, Moves.class);
+        intent.putExtra(WHITE, whiteMoves);
+        intent.putExtra(BLACK, blackMoves);
+        startActivity(intent);
+    }
+
+    private void openThirdActivity(){
+        Intent intent = new Intent(this, Increment.class);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            assert data != null;
+            int result = data.getIntExtra("result", 0);
+            increment = result * 1000;
+        }
     }
 
     private void startWhiteTimer(){
@@ -98,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mTimerRunningWhite) return;
 
+        whiteMoves++;
         mTimerRunningWhite = true;
         mWhiteLastToPlay = true;
 
@@ -144,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mTimerRunningBlack) return;
 
+        blackMoves++;
         mTimerRunningBlack = true;
         mWhiteLastToPlay = false;
 
