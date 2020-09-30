@@ -15,9 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextViewBlack;
     private Button mButtonStartPause;
     private Button mButtonReset;
-    private Button mButtonSettings;
+    private Button mButtonTime;
+    private Button mButtonIncrement;
+    private Button mButtonSound;
     private LinearLayout mWhiteLayout;
     private LinearLayout mBlackLayout;
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean mWhiteLastToPlay = false;
     private long mTimeLeftInMillisWhite = START_TIME_IN_MILLIS;
     private long mTimeLeftInMillisBlack = START_TIME_IN_MILLIS;
+    private int mIncrementValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,13 +90,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mButtonSettings = findViewById(R.id.buttonSettings);
-        mButtonSettings.setOnClickListener(new View.OnClickListener() {
+        mButtonTime = findViewById(R.id.buttonTime);
+        mButtonTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                settings();
+                setTime();
             }
         });
+
+        mButtonIncrement = findViewById(R.id.buttonIncrement);
+        mButtonIncrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setIncrement();
+            }
+        });
+
+        mButtonSound = findViewById(R.id.buttonSound);
     }
 
     private void startWhiteTimer(){
@@ -219,17 +233,18 @@ public class MainActivity extends AppCompatActivity {
                 builder.create().show();
     }
 
-    private void settings(){
+    private void setTime(){
         pauseTimers();
 
         final NumberPicker numberPicker1 = new NumberPicker(this);
-        numberPicker1.setMinValue(0);
         numberPicker1.setMaxValue(60);
+        numberPicker1.setMinValue(1);
+        numberPicker1.setValue(5);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setView(numberPicker1)
-                .setTitle("Set time and increment number")
+                .setTitle("Set the time:")
                 .setPositiveButton("Set", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -244,6 +259,42 @@ public class MainActivity extends AppCompatActivity {
                         }
                         mTextViewWhite.setTextColor(getResources().getColor(R.color.colorBlack));
                         mTextViewBlack.setTextColor(getResources().getColor(R.color.colorWhite));
+                        mTimerRunningWhite = false;
+                        mTimerRunningBlack = false;
+                        updateBlackTimer();
+                        updateWhiteTimer();
+                    }
+                });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resumeTimers();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void setIncrement(){
+        pauseTimers();
+
+        final NumberPicker numberPicker2 = new NumberPicker(this);
+        numberPicker2.setMaxValue(10);
+        numberPicker2.setMinValue(0);
+        numberPicker2.setValue(0);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setView(numberPicker2)
+                .setTitle("Set the increment:")
+                .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mIncrementValue = numberPicker2.getValue();
+                        mButtonStartPause.setBackgroundResource(R.drawable.play);
+                        if(mTimerRunningWhite || mTimerRunningBlack){
+                            mCountDownTimerWhite.cancel();
+                            mCountDownTimerBlack.cancel();
+                        }
                         mTimerRunningWhite = false;
                         mTimerRunningBlack = false;
                         updateBlackTimer();

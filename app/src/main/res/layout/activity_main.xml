@@ -74,10 +74,17 @@
         android:layout_centerInParent="true">
 
         <Button
-            android:id="@+id/buttonSettings"
+            android:id="@+id/buttonTime"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:background="@drawable/settings" />
+            android:background="@drawable/time" />
+
+        <Button
+            android:id="@+id/buttonIncrement"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/increment" />
 
         <Button
             android:id="@+id/buttonStartPause"
@@ -92,6 +99,13 @@
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="@drawable/restart" />
+
+        <Button
+            android:id="@+id/buttonSound"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/sound" />
 
     </LinearLayout>
 
