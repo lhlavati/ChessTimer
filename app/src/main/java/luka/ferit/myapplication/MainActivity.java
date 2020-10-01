@@ -6,10 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private long START_TIME_IN_MILLIS = 300000;
     private long toMillis;
+    private long mIncrementValue = 0;
 
     private TextView mTextViewWhite;
     private TextView mTextViewBlack;
@@ -42,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private boolean mTimerRunningWhite = false;
     private boolean mTimerRunningBlack = false;
     private boolean mWhiteLastToPlay = false;
+    private boolean mSoundOn = true;
+    private boolean alreadyExecutedWhite = false;
+    private boolean alreadyExecutedBlack = false;
     private long mTimeLeftInMillisWhite = START_TIME_IN_MILLIS;
     private long mTimeLeftInMillisBlack = START_TIME_IN_MILLIS;
-    private int mIncrementValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +65,23 @@ public class MainActivity extends AppCompatActivity {
         mTextViewBlack = findViewById(R.id.textViewBlack);
         mWhiteLayout = findViewById(R.id.layoutWhite);
         mBlackLayout = findViewById(R.id.layoutBlack);
+        final MediaPlayer mediaPlayerTick = MediaPlayer.create(this, R.raw.tick);
         mWhiteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mSoundOn && mTimerRunningWhite) mediaPlayerTick.start();
                 startBlackTimer();
+
+                updateWhiteTimer();
             }
         });
         mBlackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mSoundOn && mTimerRunningBlack) mediaPlayerTick.start();
                 startWhiteTimer();
+
+                updateBlackTimer();
             }
         });
         mButtonReset = findViewById(R.id.buttonRestart);
@@ -107,6 +121,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mButtonSound = findViewById(R.id.buttonSound);
+        mButtonSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSoundOn = !mSoundOn;
+                if(mSoundOn){
+                    mButtonSound.setBackgroundResource(R.drawable.sound);
+                } else {
+                    mButtonSound.setBackgroundResource(R.drawable.mute);
+                };
+            }
+        });
     }
 
     private void startWhiteTimer(){
@@ -114,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mTimerRunningWhite) return;
 
+        mTimeLeftInMillisBlack += mIncrementValue;
         mTimerRunningWhite = true;
         mWhiteLastToPlay = true;
 
@@ -121,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
             mCountDownTimerBlack.cancel();
             mTimerRunningBlack = false;
         }
+
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mCountDownTimerWhite = new CountDownTimer(mTimeLeftInMillisWhite, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -128,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
                 updateWhiteTimer();
                 if(millisUntilFinished < 10000){
                     mTextViewWhite.setTextColor(getResources().getColor(R.color.colorRed));
+                    if(!alreadyExecutedWhite && mSoundOn){
+                        v.vibrate(400);
+                        alreadyExecutedWhite = true;
+                    }
+                } else {
+                    mTextViewWhite.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
             }
 
@@ -160,6 +194,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(mTimerRunningBlack) return;
 
+        if(START_TIME_IN_MILLIS != mTimeLeftInMillisWhite) {
+            mTimeLeftInMillisWhite += mIncrementValue;
+        }
+
         mTimerRunningBlack = true;
         mWhiteLastToPlay = false;
 
@@ -167,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             mCountDownTimerWhite.cancel();
             mTimerRunningWhite = false;
         }
+
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mCountDownTimerBlack = new CountDownTimer(mTimeLeftInMillisBlack, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -174,6 +214,12 @@ public class MainActivity extends AppCompatActivity {
                 updateBlackTimer();
                 if(millisUntilFinished < 10000){
                     mTextViewBlack.setTextColor(getResources().getColor(R.color.colorRed));
+                    if(!alreadyExecutedBlack && mSoundOn){
+                        v.vibrate(400);
+                        alreadyExecutedBlack = true;
+                    }
+                } else {
+                    mTextViewBlack.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
 
@@ -220,6 +266,8 @@ public class MainActivity extends AppCompatActivity {
                         mTextViewBlack.setTextColor(getResources().getColor(R.color.colorWhite));
                         mTimerRunningWhite = false;
                         mTimerRunningBlack = false;
+                        alreadyExecutedWhite = false;
+                        alreadyExecutedBlack = false;
                         updateBlackTimer();
                         updateWhiteTimer();
                     }
@@ -289,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Set", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mIncrementValue = numberPicker2.getValue();
+                        mIncrementValue = numberPicker2.getValue() * 1000;
                         mButtonStartPause.setBackgroundResource(R.drawable.play);
                         if(mTimerRunningWhite || mTimerRunningBlack){
                             mCountDownTimerWhite.cancel();
