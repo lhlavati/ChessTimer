@@ -1,5 +1,6 @@
 package luka.ferit.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private long START_TIME_IN_MILLIS = 300000;
     private long toMillis;
+    private long stringToLongBlack;
+    private long stringToLongWhite;
     private long mIncrementValue = 0;
 
     private TextView mTextViewWhite;
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(mSoundOn && mTimerRunningWhite) mediaPlayerTick.start();
                 startBlackTimer();
-
                 updateWhiteTimer();
             }
         });
@@ -80,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(mSoundOn && mTimerRunningBlack) mediaPlayerTick.start();
                 startWhiteTimer();
-
                 updateBlackTimer();
             }
         });
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillisWhite = millisUntilFinished;
                 updateWhiteTimer();
+                mTimeLeftInMillisWhite = stringToLongWhite;
                 if(millisUntilFinished < 10000){
                     mTextViewWhite.setTextColor(getResources().getColor(R.color.colorRed));
                     if(!alreadyExecutedWhite && mSoundOn){
@@ -162,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     mTextViewWhite.setTextColor(getResources().getColor(R.color.colorBlack));
+                    alreadyExecutedWhite = false;
                 }
             }
 
@@ -173,10 +176,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateWhiteTimer(){
-        int minutes = (int) mTimeLeftInMillisWhite / 60000;
-        int seconds = (int) mTimeLeftInMillisWhite % 60000 / 1000;
-
         String timeLeftText;
+        roundMillisWhite();
+
+        int minutes = (int) stringToLongWhite / 60000;
+        int seconds = (int) stringToLongWhite % 60000 / 1000;
+
         if(minutes < 10){
             timeLeftText = "0" + minutes;
         }else{
@@ -212,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillisBlack = millisUntilFinished;
                 updateBlackTimer();
+                mTimeLeftInMillisBlack = stringToLongBlack;
                 if(millisUntilFinished < 10000){
                     mTextViewBlack.setTextColor(getResources().getColor(R.color.colorRed));
                     if(!alreadyExecutedBlack && mSoundOn){
@@ -220,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     mTextViewBlack.setTextColor(getResources().getColor(R.color.colorWhite));
+                    alreadyExecutedBlack = false;
                 }
             }
 
@@ -231,11 +238,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBlackTimer(){
-
-        int minutes = (int) mTimeLeftInMillisBlack / 60000;
-        int seconds = (int) mTimeLeftInMillisBlack % 60000 / 1000;
-
         String timeLeftText;
+        roundMillisBlack();
+
+        int minutes = (int) stringToLongBlack / 60000;
+        int seconds = (int) stringToLongBlack % 60000 / 1000;
+
         if(minutes < 10){
             timeLeftText = "0" + minutes;
         }else{
@@ -246,6 +254,32 @@ public class MainActivity extends AppCompatActivity {
         timeLeftText += seconds;
 
         mTextViewBlack.setText(timeLeftText);
+    }
+
+    private void roundMillisWhite(){
+        String timeLeftInMillis = String.valueOf(mTimeLeftInMillisWhite);
+        StringBuilder sb = new StringBuilder(timeLeftInMillis);
+        int n = timeLeftInMillis.length();
+
+        for(int i = n-1; i > n-4; i--){
+            if (timeLeftInMillis.charAt(i) != '0') {
+                sb.setCharAt(i, '0');
+            }
+        }
+        stringToLongWhite = Long.parseLong(String.valueOf(sb));
+    }
+
+    private void roundMillisBlack(){
+        String timeLeftInMillis = String.valueOf(mTimeLeftInMillisBlack);
+        StringBuilder sb = new StringBuilder(timeLeftInMillis);
+        int n = timeLeftInMillis.length();
+
+        for(int i = n-1; i > n-4; i--){
+            if (timeLeftInMillis.charAt(i) != '0') {
+                sb.setCharAt(i, '0');
+            }
+        }
+        stringToLongBlack = Long.parseLong(String.valueOf(sb));
     }
 
     private void resetTimer(){
