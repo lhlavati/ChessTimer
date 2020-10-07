@@ -170,7 +170,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
+                if(mSoundOn){
+                    v.vibrate(600);
+                }
+                mTextViewBlack.setTextColor(getResources().getColor(R.color.colorGold));
+                mTimerRunningWhite = false;
             }
         }.start();
     }
@@ -232,7 +236,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
+                if(mSoundOn){
+                    v.vibrate(600);
+                }
+                mTextViewWhite.setTextColor(getResources().getColor(R.color.colorGold));
+                mTimerRunningBlack = false;
             }
         }.start();
     }
@@ -412,6 +420,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startBlackTimer();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        pauseTimers();
     }
 
     @Override
