@@ -25,7 +25,7 @@
                 android:gravity="center"
                 android:background="@color/colorBlack"
                 android:textColor="@color/colorWhite"
-                android:text="05:00"
+                android:text="@string/timer"
                 android:textSize="100sp"
                 android:rotation="180"
                 android:fontFamily="@font/arial_rounded_mt_bold"/>
@@ -54,7 +54,7 @@
                 android:gravity="center"
                 android:background="@color/colorWhite"
                 android:textColor="@color/colorBlack"
-                android:text="05:00"
+                android:text="@string/timer"
                 android:textSize="100sp"
                 android:fontFamily="@font/arial_rounded_mt_bold" />
 
